@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using _2._2._1;
 using _2._2._2;
 using _2._2._3;
+using _2._2._4;
 
 namespace linqTest;
 
@@ -12,10 +13,7 @@ class Program
     static void Main(string[] args)
     {
 
-
     }   
-    
-
     static void task2_2_1()
     {
                 List<Movie> movies = new List<Movie>();
@@ -232,6 +230,65 @@ class Program
         foreach (var ship in shipWithRiver)
         {
             Console.WriteLine($"{ship.Ship}, {ship.River}");
+        }
+    }
+
+    static void task_2_2_4()
+    {
+                List<Airplane> airplanes = new List<Airplane>();
+        airplanes.Add(new Airplane("Самолет 1","Пассажирский", 380, 14600, 64, 2000, 1));
+        airplanes.Add(new Airplane("Самолет 2","Пассажирский", 400, 16400, 65, 1900, 2));
+        airplanes.Add(new Airplane("Самолет 3","Пассажирский", 450, 20000, 70, 2300, 1));
+        airplanes.Add(new Airplane("Самолет 4","Пассажирский", 140, 13000, 60, 1600, 3));
+
+        List<Helicopter> helicopters = new List<Helicopter>();
+        helicopters.Add(new Helicopter("Пассажирский", 5, 5000, 10000, 2));
+        helicopters.Add(new Helicopter("Пассажирский", 6,  4000, 12000, 2));
+        helicopters.Add(new Helicopter("Пассажирский", 4, 3000, 6000, 3));
+        helicopters.Add(new Helicopter("Пассажирский", 6, 3400, 6700, 1));
+
+        List<Company> companies = new List<Company>();
+        companies.Add(new Company("Аэрофлот", "Какой-то адресс", 1995, 1));
+        companies.Add(new Company("Nordwind", "Еще один адресс", 2000, 2));
+        companies.Add(new Company("Победа", "Адрес третьей компании", 1991, 3));
+
+        //Самолет отсортиврованный по грузоподъемности
+        var sortedPlanes = airplanes.OrderBy(p => p.WeightCapacity);
+        foreach (var plane in sortedPlanes)
+        {
+            Console.WriteLine($"{plane.Type}, {plane.WeightCapacity}");
+        }
+        
+        Console.WriteLine("\n\n---------------------------\n\n");
+        
+        //Вертолет групированный по высоте подъема и дальности полета
+        var groupedHelicopters = helicopters.GroupBy(h => new { h.MaxLength, h.MaxHeight });
+        foreach (var helicopterGroups in groupedHelicopters)
+        {
+            foreach (var helicopter in helicopterGroups)
+            {
+                Console.WriteLine($"{helicopter.Type}, {helicopter.MaxLength}, {helicopter.MaxHeight}");
+            }
+        }
+        
+        Console.WriteLine("\n\n---------------------------\n\n");
+
+        //Самолетов в компании
+        int countPlanesInCompanyOne = airplanes.Count(p => p.CompanyId == 1);
+        Console.WriteLine($"Самолетов в первой компании - {countPlanesInCompanyOne}");
+        
+        Console.WriteLine("\n\n---------------------------\n\n");
+
+
+        //Самолеты с компанией
+        var planesWithCompanyFull = airplanes.Join(companies,
+            p => p.CompanyId,
+            c => c.Id,
+            (p, c) => new { p.Name, c.Title });
+
+        foreach (var plane in planesWithCompanyFull)
+        {
+            Console.WriteLine($"{plane.Name}, {plane.Title}");
         }
     }
     
