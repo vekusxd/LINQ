@@ -3,6 +3,7 @@ using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
 using _2._2._1;
 using _2._2._2;
+using _2._2._3;
 
 namespace linqTest;
 
@@ -10,8 +11,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        //task2_2_1();
-        //task2_2_2();
+
+
     }   
     
 
@@ -164,6 +165,73 @@ class Program
         foreach (var product in productsWithManufacturers)
         {  
             Console.WriteLine($"{product.Product}, {product.Manufacturer}");
+        }
+    }
+
+    static void task_2_2_3()
+    {
+                //task2_2_1();
+        //task2_2_2();
+        List<River> rivers = new List<River>();
+        rivers.Add(new River("Енисей", 3487000, 700, 500, 1));
+        rivers.Add(new River("Обь", 3650000, 12000, 161000, 2));
+        rivers.Add(new River("Лена", 4400000, 2000, 176, 3));
+        rivers.Add(new River("Амур", 2824000, 300, 50, 4));
+
+        List<Sea> seas = new List<Sea>();
+        seas.Add(new Sea("Средиземное море", 2500000 , 5));
+        seas.Add(new Sea("Берингово море", 2260000, 6));
+        seas.Add(new Sea("Жёлтое море", 416000, 7));
+        seas.Add(new Sea("Азовское море", 39000, 8));
+        seas.Add(new Sea("Балтийское море", 419000, 9));
+
+        List<Ship> ships = new List<Ship>();
+        ships.Add(new Ship("Корабль - 1", 2000, "Пароходная1", 1999, "речной", 4));
+        ships.Add(new Ship("Корабль - 2", 1500, "Пароходная1", 2001, "речной", 1));
+        ships.Add(new Ship("Корабль - 3", 5000, "Пароходная2", 2005, "морской", 9));
+        ships.Add(new Ship("Корабль - 4", 1200, "Пароходная2", 1987, "морской", 7));
+        ships.Add(new Ship("Корабль - 5", 500, "Пароходная1", 2003, "речной", 2));
+
+        //Реки по длине
+        var OrderedRivers = rivers.OrderBy(r => r.Length);
+
+        foreach (var river in OrderedRivers)
+        {
+            Console.WriteLine($"{river.Title}, {river.Length}");
+        }
+        
+        Console.WriteLine("\n\n---------------------------\n\n");
+
+        //Данные сгрупированные по пароходству и году постройки
+        var groupedShips = ships.GroupBy(s => new { s.Owner, s.Year });
+
+        foreach (var ShipsKey in groupedShips)
+        {
+            foreach (var ship in ShipsKey)
+            {
+                Console.WriteLine($"{ship.Title}, {ship.Owner}, {ship.Year}");
+            }
+        }
+        
+        Console.WriteLine("\n\n---------------------------\n\n");
+        
+        //Число кораблей в пароходстве
+        int shipsCount = ships.Count();
+        
+        Console.WriteLine($"Количество кораблей - {shipsCount}");
+        
+        Console.WriteLine("\n\n---------------------------\n\n");
+        
+        //Корабль и река join
+
+        var shipWithRiver = ships.Join(rivers,
+            s => s.Water_id,
+            r => r.Id,
+            (s, r) => new { Ship = s.Title, River = r.Title });
+
+        foreach (var ship in shipWithRiver)
+        {
+            Console.WriteLine($"{ship.Ship}, {ship.River}");
         }
     }
     

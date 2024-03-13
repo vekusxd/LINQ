@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\2.2.1\2.2.1.csproj" />
       <ProjectReference Include="..\2.2.2\2.2.2.csproj" />
+      <ProjectReference Include="..\2.2.3\2.2.3.csproj" />
     </ItemGroup>
 
 </Project>
