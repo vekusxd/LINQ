@@ -1,10 +1,12 @@
 ﻿using System.Data.SqlTypes;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
+using _1._6;
 using _2._2._1;
 using _2._2._2;
 using _2._2._3;
 using _2._2._4;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace linqTest;
 
@@ -289,6 +291,190 @@ class Program
         foreach (var plane in planesWithCompanyFull)
         {
             Console.WriteLine($"{plane.Name}, {plane.Title}");
+        }
+    }
+
+    static void task_1_1_2()
+    {
+                List<_1._2.Product> products = new List<_1._2.Product>();
+        products.Add((new _1._2.Product("Помидоры", 234.5, 48,
+            ["2023-11-15", "2023-11-15", "2024-04-08"], "Завод 1")));
+        products.Add(new _1._2.Product("Огурцы", 123.5, 45,
+            ["2022-11-19", "2022-12-09", "2022-07-06"], "Завод 2"));
+        products.Add(new _1._2.Product("Тапочки", 200, 56, 
+            ["2023-11-15"],"Завод 3"));
+        var selectAll = products.Select(p => p);
+
+        foreach (var item in selectAll)
+        {
+            Console.WriteLine($"{item.Title}, {item.Manufacturer}, {item.Cost}, {item.Count}");
+        }
+        
+        Console.WriteLine("\n----------------\n");
+
+        //Один фильтр
+        var oneFilter = products.Where(p => p.Count > 50);
+
+        foreach (var item in oneFilter)
+        {
+            Console.WriteLine($"{item.Title}, {item.Count}, {item.Manufacturer}, {item.Cost}");
+        }
+        
+        Console.WriteLine("\n----------------\n");
+
+        //несколько фильтров
+        var moreFilters = products.Where(p => p.Count < 50 && p.Cost > 200);
+
+        foreach (var item in moreFilters)
+        {
+            Console.WriteLine($"{item.Title}, {item.Count}, {item.Manufacturer}, {item.Cost}");
+        }
+        
+        Console.WriteLine("\n----------------\n");
+
+        //Сортировка по одному полю
+        var sortedOneField = products.OrderBy(p => p.Count);
+        foreach (var item in sortedOneField)
+        {
+            Console.WriteLine($"{item.Title}, {item.Count}, {item.Manufacturer}, {item.Cost}");
+        }
+        
+        Console.WriteLine("\n----------------\n");
+        
+        //Сортировка по нескольким полям
+        var sortedTwoFileds = products.OrderBy(p => p.Title).ThenByDescending(p => p.Count);
+        foreach (var item in sortedTwoFileds)
+        {
+            Console.WriteLine($"{item.Title}, {item.Count}, {item.Manufacturer}, {item.Cost}");
+        }
+        
+        Console.WriteLine("\n----------------\n");
+
+        //Группировка по одному полю
+        var groupedByOne = products.GroupBy(p => p.Cost);
+        foreach (var itemKey in groupedByOne)
+        {
+            foreach (var item in itemKey)
+            {
+                Console.WriteLine($"{item.Title}, {item.Count}, {item.Manufacturer}, {item.Cost}");
+            }
+        }
+        
+        Console.WriteLine("\n----------------\n");
+
+        var groupedByMany = products.GroupBy(p => new { p.Cost, p.Count });
+        foreach (var itemKey in groupedByMany)
+        {
+            foreach (var item in itemKey)
+            {
+                Console.WriteLine($"{item.Title}, {item.Count}, {item.Manufacturer}, {item.Cost}");
+            }
+        }
+        
+        Console.WriteLine("\n----------------\n");
+        
+        //Проекция
+        var projection = products.Select(p => new
+        {
+            Title = p.Title,
+            TotalCost = p.Cost * p.Count
+        });
+
+        foreach (var item in projection)
+        {
+            Console.WriteLine($"{item.Title}, {item.TotalCost}");
+        }
+    }
+
+    static void task_1_1_6()
+    {
+                List<Cinema> cinemas = new List<Cinema>();
+        cinemas.Add(new Cinema("Киномакс", 1500, 1999, "Для просмотра видеофильмов"));
+        cinemas.Add(new Cinema("Центральный", 1500, 1999, "Для просмотра широкоформатных фильмов"));
+        cinemas.Add(new Cinema("Ближний", 500, 2015, "наличие стереоформатного оборудования"));
+        cinemas.Add(new Cinema("Плаза", 2000, 2015, "Большая вместимость"));
+        cinemas.Add(new Cinema("Восточный", 1700, 1923, "Первый кинотеатр"));
+
+        //Простой выбор
+        var allRes = cinemas.Select(s => s);
+        foreach (var item in allRes)
+        {
+            Console.WriteLine($"{item.Title}, {item.Year}, {item.Capacity}, {item.Special}");
+        }
+        
+        Console.WriteLine("\n-------------------------\n");
+        
+        //С одним фильтром
+        var withOneFilter = cinemas.Where(s => s.Capacity > 1300);
+
+        foreach (var item in withOneFilter)
+        {
+            Console.WriteLine($"{item.Title}, {item.Year}, {item.Capacity}, {item.Special}");
+        }
+        
+        Console.WriteLine("\n-------------------------\n");
+        
+        //С несколькими фильтрами
+        var withMoreFilters = cinemas.Where(s => s.Capacity < 1600 && s.Year > 1998);
+
+        foreach (var item in withMoreFilters)
+        {
+            Console.WriteLine($"{item.Title}, {item.Year}, {item.Capacity}, {item.Special}");
+        }
+        
+        Console.WriteLine("\n-------------------------\n");
+
+        //Сортировка по одному полю
+        var sortedWithOne = cinemas.OrderBy(s => s.Capacity);
+        
+        foreach (var item in sortedWithOne)
+        {
+            Console.WriteLine($"{item.Title}, {item.Year}, {item.Capacity}, {item.Special}");
+        }
+        
+        Console.WriteLine("\n-------------------------\n");
+
+        //Сортировка по нескольким полям
+        var sortedwithMany = cinemas.OrderBy(s => s.Capacity).ThenByDescending(s => s.Year);
+        foreach (var item in sortedwithMany)
+        {
+            Console.WriteLine($"{item.Title}, {item.Year}, {item.Capacity}, {item.Special}");
+        }
+        Console.WriteLine("\n-------------------------\n");
+
+        //Группировка по одному полю
+        var groupedByOne = cinemas.GroupBy(s => s.Capacity);
+        foreach (var itemKey in groupedByOne)
+        {
+            foreach (var item in itemKey)
+            {
+                Console.WriteLine($"{item.Title}, {item.Year}, {item.Capacity}, {item.Special}");
+            }
+        }
+        Console.WriteLine("\n-------------------------\n");
+
+        //Группиврока по нескольким полям
+        var groupedByMany = cinemas.GroupBy(s => new { s.Capacity, s.Year });
+        foreach (var itemKey in groupedByMany)
+        {
+            foreach (var item in itemKey)
+            {
+                Console.WriteLine($"{item.Title}, {item.Year}, {item.Capacity}, {item.Special}");
+            }
+        }
+        Console.WriteLine("\n-------------------------\n");
+
+        //Проекция
+        var projection = cinemas.Select(s => new
+        {
+            Title = s.Title,
+            TotalYear = DateTime.Now.Year - s.Year,
+            Capacity = s.Capacity
+        });
+
+        foreach (var item in projection)
+        {
+            Console.WriteLine($"{item.Title}, {item.TotalYear}, {item.Capacity}");
         }
     }
     
