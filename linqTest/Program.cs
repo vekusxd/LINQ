@@ -1,6 +1,8 @@
 ﻿using System.Data.SqlTypes;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
+using _1._3;
+using _1._5;
 using _1._6;
 using _2._2._1;
 using _2._2._2;
@@ -170,8 +172,6 @@ class Program
 
     static void task_2_2_3()
     {
-                //task2_2_1();
-        //task2_2_2();
         List<River> rivers = new List<River>();
         rivers.Add(new River("Енисей", 3487000, 700, 500, 1));
         rivers.Add(new River("Обь", 3650000, 12000, 161000, 2));
@@ -475,6 +475,174 @@ class Program
         foreach (var item in projection)
         {
             Console.WriteLine($"{item.Title}, {item.TotalYear}, {item.Capacity}");
+        }
+    }
+
+    static void task_1_1_5()
+    {
+                List<Trolleybus> trolleybusList = new List<Trolleybus>();
+        trolleybusList.Add(new Trolleybus("Дербышки", "Проспект победы", 3, "1.30", [23,45,67]));
+        trolleybusList.Add(new Trolleybus("Аэропорт", "Яшьлек", 4, "2.20",[45,89]));
+        trolleybusList.Add(new Trolleybus("Авиастрой", "Завойского", 4, "1.45", [12,11,67,56]));
+        trolleybusList.Add(new Trolleybus("Тукая", "Баки Урменче", 3, "2.30", [89,67,54,34,43]));
+
+        //Выборка всех
+        var all = trolleybusList.Select(t => t);
+        foreach (var item in all)
+        {
+            Console.WriteLine($"{item.Begin} - {item.End}, {item.Time}, {item.Count}");
+        }
+        Console.WriteLine("\n-------------------------------\n");
+
+        //Один фильтр
+        var withOneFilter = trolleybusList.Where(t => t.Count > 3);
+        foreach (var item in withOneFilter)
+        {
+            Console.WriteLine($"{item.Begin} - {item.End}, {item.Time}, {item.Count}");
+        }
+        Console.WriteLine("\n-------------------------------\n");
+
+        //Несколько филтьров
+        var withManyFilter = trolleybusList.Where(t => t.Count > 3 && t.Begin != "Тукая");
+        foreach (var item in withManyFilter)
+        {
+            Console.WriteLine($"{item.Begin} - {item.End}, {item.Time}, {item.Count}");
+        }
+        Console.WriteLine("\n-------------------------------\n");
+        
+        //Сортировка по одному полю
+        var sortWithOneField = trolleybusList.OrderBy(t => t.Time);
+        foreach (var item in sortWithOneField)
+        {
+            Console.WriteLine($"{item.Begin} - {item.End}, {item.Time}, {item.Count}");
+        }
+        Console.WriteLine("\n-------------------------------\n");
+
+        //Сортировка по нескольим полям
+        var sortWithManyFilter = trolleybusList.OrderBy(t => t.Time).ThenByDescending(t => t.Begin);
+        foreach (var item in sortWithManyFilter)
+        {
+            Console.WriteLine($"{item.Begin} - {item.End}, {item.Time}, {item.Count}");
+        }
+        Console.WriteLine("\n-------------------------------\n");
+        
+        //Группировка по одному полю
+        var groupByOne = trolleybusList.GroupBy(t => t.Count);
+        foreach (var itemKey in groupByOne)
+        {
+            foreach (var item in itemKey)
+            {
+                Console.WriteLine($"{item.Begin} - {item.End}, {item.Time}, {item.Count}");
+            }
+        } 
+        Console.WriteLine("\n-------------------------------\n");
+
+        //Группировка по нескольким полям
+        var groupByMany = trolleybusList.GroupBy(t => new { t.Time, t.Count });
+        foreach (var itemkey in groupByMany)
+        {
+            foreach (var item in itemkey)
+            {
+                Console.WriteLine($"{item.Begin} - {item.End}, {item.Time}, {item.Count}");
+                
+            }
+        }
+        Console.WriteLine("\n-------------------------------\n");
+        
+        //Проекция
+        var projection = trolleybusList.Select(t => new
+        {
+            Full  = t.Begin + " - " + t.End,
+            Time = t.Time
+        });
+
+        foreach (var item in projection)
+        {
+            Console.WriteLine($"{item.Full}, {item.Time}");
+        }
+    }
+
+    static void task_1_3_3()
+    {
+                List<Computer> computers = new List<Computer>();
+        computers.Add(new Computer("IBM", 3000, 1000, ["Данил", "Кирилл", "Иван"]));
+        computers.Add(new Computer("MSI", 1400, 500, ["Павел", "Артем", "Илья"]));
+        computers.Add(new Computer("GIGABYTE", 1200, 450, ["Иван", "Алексей", "Эрик", "Василий"]));
+        computers.Add(new Computer("ASUS", 1000, 450, ["Эмиль", "Никита", "Алексей", "Павел"]));
+        
+        //Выборка всего
+        var selectAll = computers.Select(c => c);
+        foreach (var item in selectAll)
+        {
+            Console.WriteLine($"{item.Title}, {item.Cost}, {item.Power}, Количество пользователей - {item.Users.Count}");
+        }
+        Console.WriteLine("\n--------------------------------------\n");
+
+        //С одним фильтром
+        var withOneFilter = computers.Where(c => c.Users.Contains("Павел"));
+        foreach (var item in withOneFilter)
+        {
+            Console.WriteLine($"{item.Title}, {item.Cost}, {item.Power}, Количество пользователей - {item.Users.Count}");
+        }
+        Console.WriteLine("\n--------------------------------------\n");
+
+        //С нескольики фильтрами
+        var withManyFilter = computers.Where(c => c.Users.Contains("Алексей") && c.Power > 400);
+        foreach (var item in withManyFilter)
+        {
+            Console.WriteLine($"{item.Title}, {item.Cost}, {item.Power}, Количество пользователей - {item.Users.Count}");
+        }
+        Console.WriteLine("\n--------------------------------------\n");
+
+        //Сортировка по одному полю
+        var sortedByOne = computers.OrderBy(c => c.Power);
+        foreach (var item in sortedByOne)
+        {
+            Console.WriteLine($"{item.Title}, {item.Cost}, {item.Power}, Количество пользователей - {item.Users.Count}");
+        }
+        Console.WriteLine("\n--------------------------------------\n");
+        
+        //Сортировка по нескольким полям
+        var sortedByMany = computers.OrderBy(c => c.Power).ThenByDescending(c => c.Cost);
+        foreach (var item in sortedByMany)
+        {
+            Console.WriteLine($"{item.Title}, {item.Cost}, {item.Power}, Количество пользователей - {item.Users.Count}");
+        }
+        Console.WriteLine("\n--------------------------------------\n");
+
+        //Группировка по одному полю
+        var groupedByOne = computers.GroupBy(c => c.Power);
+        foreach (var itemKeys in groupedByOne)
+        {
+            foreach (var item in itemKeys)
+            {
+                Console.WriteLine($"{item.Title}, {item.Cost}, {item.Power}, Количество пользователей - {item.Users.Count}");
+            }
+        }
+        Console.WriteLine("\n--------------------------------------\n");
+
+        //Группировка по нескольким полям
+        var groupedByMany = computers.GroupBy(c => new { c.Cost, c.Power });
+        foreach (var itemKey in groupedByMany)
+        {
+            foreach (var item in itemKey)
+            {
+                Console.WriteLine($"{item.Title}, {item.Cost}, {item.Power}, Количество пользователей - {item.Users.Count}");
+            }
+        }
+        Console.WriteLine("\n--------------------------------------\n");
+
+        //Проекция
+        var projection = computers.Select(c => new
+        {
+            Title = c.Title,
+            SomeStat = c.Cost * c.Power,
+            FirstUser = c.Users.First()
+        });
+
+        foreach (var item in projection)
+        {
+            Console.WriteLine($"{item.Title}, {item.SomeStat}. {item.FirstUser}");
         }
     }
     
